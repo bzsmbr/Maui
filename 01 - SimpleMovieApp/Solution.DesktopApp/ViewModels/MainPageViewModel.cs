@@ -1,8 +1,19 @@
-﻿namespace Solution.DesktopApp.ViewModels;
+﻿using CommunityToolkit.Mvvm.Input;
+using Solution.Database.Entities;
 
-public class MainPageViewModel
+namespace Solution.DesktopApp.ViewModels;
+
+public class MainPageViewModel : MovieModel
 {
-	public MainPageViewModel(AppDbContext context)
-	{
-	}
+    public DateTime MaxDateTime => DateTime.Now;
+
+    public IAsyncRelayCommand OnSubmitCommand => new AsyncRelayCommand(OnSubmitAsync);
+
+    private async Task OnSubmitAsync()
+    { }
+
+    public MainPageViewModel()
+    {
+        this.Release = DateTime.Now;
+    }
 }

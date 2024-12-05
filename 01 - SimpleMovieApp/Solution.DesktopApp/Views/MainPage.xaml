@@ -5,12 +5,29 @@
              x:DataType="viewModel:MainPageViewModel"
              x:Class="Solution.DesktopApp.MainPage">
 
-    <ScrollView>
-        <Label
-                Text="Welcome to &#10;.NET Multi-platform App UI"
-                Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
-    </ScrollView>
+    <FlexLayout Direction="Column" 
+                HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
+                Margin="50, 0, 50, 0">
+
+        <Label Text="Movie Data" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" />
+
+        <StackLayout>
+            <Label Text="Movie Title" />
+            <Entry Text="{Binding Title}" />
+        </StackLayout>
+
+        <StackLayout>
+            <Label Text="Movie Length" />
+            <Entry Text="{Binding Length}" />
+        </StackLayout>
+
+        <StackLayout>
+            <Label Text="Movie Release" />
+            <DatePicker Date="{Binding Release}" MaximumDate="{Binding MaxDateTime}" />
+        </StackLayout>
+
+        <Button Text="Submit" Command="{Binding OnSumbitCommand}" />
+        
+    </FlexLayout>
 
 </ContentPage>

@@ -6,3 +6,6 @@ global using Solution.DataBase;
 global using Solution.DesktopApp.Configurations;
 global using Solution.DesktopApp.ViewModels;
 global using System.Reflection;
+global using Solution.Core.Models;
+global using CommunityToolkit.Mvvm.Input;
+global using Solution.Database.Entities;
