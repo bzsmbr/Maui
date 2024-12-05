@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Solution.DataBase;
-
-namespace Solution.DesktopApp;
+﻿namespace Solution.DesktopApp;
 
 public static class MauiProgram
 {

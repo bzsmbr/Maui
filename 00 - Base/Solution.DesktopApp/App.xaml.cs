@@ -4,10 +4,10 @@
     {
         public App()
         {
-		ExceptionHandler.UnhandledException += OnException;
+			ExceptionHandler.UnhandledException += OnException;
 
-		InitializeComponent();
-	}
+			InitializeComponent();
+		}
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
@@ -17,5 +17,6 @@
 	private void OnException(object sender, UnhandledExceptionEventArgs e)
 	{
 		var exception = e.ExceptionObject as Exception;
+		
 	}
 }
