@@ -9,7 +9,14 @@ public partial class MainPage : ContentPage
     public MainPage(MainPageViewModel viewModel)
     {
         this.BindingContext = viewModel;
+        this.SizeChanged += OnSizeChanged;
 
         InitializeComponent();
+    }
+
+    private void OnSizeChanged(object? sender, EventArgs e)
+    {
+        ContentPage page = sender as ContentPage;
+        ViewModel.DatePickerWidth = page.Width - 100;
     }
 }

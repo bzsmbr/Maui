@@ -98,4 +98,10 @@
 	  <ProjectReference Include="..\Solution.ValidationLibrary\Solution.ValidationLibrary.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <MauiXaml Update="Resources\Styles\AppStyles.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>
