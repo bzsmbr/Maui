@@ -28,6 +28,7 @@ public class EntryIntegerBehaviour : Behavior<Entry>
 
         if (string.IsNullOrEmpty(e.NewTextValue))
         {
+            entry!.Text = null;
             return;
         }
 
