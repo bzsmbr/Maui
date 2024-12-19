@@ -1,8 +1,6 @@
-﻿using ErrorOr;
-
-namespace Solution.Core.Interfaces;
+﻿namespace Solution.Core.Interfaces;
 
 public interface IMovieService
 {
-    Task<ErrorOr<MovieModel>> CreateAsync(MovieModel movie)
+	Task<ErrorOr<MovieModel>> CreateAsync(MovieModel movie);
 }
