@@ -11,6 +11,10 @@ public class BookEntity
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public uint Id { get; set; }
 
+    [Required]
+    [StringLength(64)]
+    public string PublicId { get; set; }
+
     //ISBN
     [Required]
     public string ISBN { get; set; }
@@ -25,7 +29,7 @@ public class BookEntity
 
     //Release year
     [Required]
-    public DateTime ReleaseYear { get; set; }
+    public int ReleaseYear { get; set; }
 
     //Publisher Name
     [Required]
