@@ -36,7 +36,7 @@ public partial class BookModel
     {
         Id = entity.PublicId;
         ISBN.Value = entity.ISBN;
-        Writer.Value = entity.Writer; 
+        Writer.Value = entity.Writer;
         Title.Value = entity.Title;
         ReleaseYear.Value = entity.ReleaseYear;
         PublisherName.Value = entity.PublisherName;

@@ -39,4 +39,18 @@ public class ValidatableObject<T> : ObservableObject
         
         return IsValid;
     }
+
+    public bool IsValidISBN(string isbn)
+    {
+        Errors = Validations?.Where(x => !x.Check(Value))
+                            ?.Select(x => x.ValidationMessage)
+                            ?.ToArray() ?? [];
+
+        IsValid = !Errors.Any();
+
+        if (isbn.Length == 10 || isbn.Length == 13 && isbn.All(char.IsDigit))
+            IsValid = false;
+
+        return IsValid;
+    }
 }

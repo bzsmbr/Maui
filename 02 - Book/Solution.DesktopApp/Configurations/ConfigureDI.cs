@@ -1,4 +1,7 @@
-﻿namespace Solution.DesktopApp.Configurations;
+﻿using Solution.Core.Interfaces;
+using Solution.Services;
+
+namespace Solution.DesktopApp.Configurations;
 
 public static class ConfigureDI
 {
@@ -6,6 +9,8 @@ public static class ConfigureDI
 	{
 		builder.Services.AddTransient<MainPageViewModel>();
 
-		return builder;
+        builder.Services.AddTransient<IBookService, BookService>();
+
+        return builder;
 	}
 }

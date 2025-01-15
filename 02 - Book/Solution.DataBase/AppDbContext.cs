@@ -2,7 +2,9 @@
 
 public class AppDbContext() : DbContext
 {
-	private static string connectionString = string.Empty;
+    public DbSet<BookEntity> Books { get; set; }
+
+    private static string connectionString = string.Empty;
 
 	static AppDbContext()
 	{
@@ -21,7 +23,7 @@ public class AppDbContext() : DbContext
 	private static string GetConnectionString()
 	{
 #if DEBUG
-		var file = "connectionString.Development.json";
+		var file = "appSettings.Development.json";
 #else
         var file = "connectionString.Production.json";
 #endif

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-[Table("Movie")]
+[Table("Book")]
 [Index(nameof(ISBN), IsUnique = true)]
 public class BookEntity
 {
