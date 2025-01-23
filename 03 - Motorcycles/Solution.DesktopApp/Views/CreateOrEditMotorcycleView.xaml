@@ -1,11 +1,34 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Solution.DesktopApp.Views.CreateOrEditMotorcycleView">
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewModels="clr-namespace:Solution.DesktopApp.ViewModels"
+             xmlns:models="clr-namespace:Solution.Core.Models;assembly=Solution.Core"
+             x:Class="Solution.DesktopApp.Views.CreateOrEditMotorcycleView"
+             x:DataType="viewModels:CreateOrEditMotorcycleViewModel">
+  
+  <ContentPage.Behaviors>
+    <toolkit:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing"/>
+    <toolkit:EventToCommandBehavior Command="{Binding DisappearingCommand}" EventName="Disappearing" />
+  </ContentPage.Behaviors>
+
+
+  <StackLayout Orientation="Vertical">
+
     <VerticalStackLayout>
-        <Label 
-            Text="Create or edit motorcycle"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+      <Label Text="Manufacturer"></Label>
+      <Picker Title="Select a Manufacturer"
+              ItemsSource="{Binding Manufacturers}"
+              ItemDisplayBinding="{Binding Name}" 
+              SelectedItem="{Binding Manufacturer}">
+        <Picker.Behaviors>
+          <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged"
+                                          Command="{Binding ManufacturerIndexChangedCommand}" />
+        </Picker.Behaviors>
+      </Picker>
     </VerticalStackLayout>
+
+    <Button Text="Save" Command="{Binding SaveCommand}" />
+  </StackLayout>
+  
 </ContentPage>

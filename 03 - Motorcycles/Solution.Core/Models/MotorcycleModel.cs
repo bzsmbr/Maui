@@ -28,7 +28,7 @@ public partial class MotorcycleModel
     public MotorcycleModel(MotorcycleEntity entity): this()
     {
         this.Id = entity.PublicId;
-        this.ManufacturerId.Value = entity.ManufacturerId;
+        this.ManufacturerId.Value = entity.Manufacturer.Id;
         this.Model.Value = entity.Model;
         this.Cubic.Value = entity.Cubic;
         this.ReleaseYear.Value = entity.ReleaseYear;
@@ -62,7 +62,7 @@ public partial class MotorcycleModel
     {
         this.ManufacturerId.Validations.Add(new MinValueRule<uint>(1)
         {
-            ValidationMessage = "Manufacturer must be selected"
+            ValidationMessage = "ManufacturerId must be selected"
         });
 
         this.Model.Validations.Add(new IsNotNullOrEmptyRule<string>
