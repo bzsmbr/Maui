@@ -4,7 +4,7 @@ public partial class MotorcycleModel
 {
     public string Id { get; set; }
 
-    public ValidatableObject<uint> ManufacturerId { get; set; }
+    public ValidatableObject<ManufacturerModel> Manufacturer { get; set; }
 
     public ValidatableObject<string> Model { get; protected set; }
 
@@ -12,15 +12,15 @@ public partial class MotorcycleModel
 
     public ValidatableObject<uint?> ReleaseYear { get; protected set; }
 
-    public ValidatableObject<uint?> Cylinders { get; protected set; }
+    public ValidatableObject<uint?> NumberOfCylinders { get; protected set; }
 
     public MotorcycleModel()
     {
-        this.ManufacturerId = new ValidatableObject<uint>();
+        this.Manufacturer = new ValidatableObject<ManufacturerModel>();
         this.Model = new ValidatableObject<string>();
         this.Cubic = new ValidatableObject<uint?>();
         this.ReleaseYear = new ValidatableObject<uint?>();
-        this.Cylinders = new ValidatableObject<uint?>();
+        this.NumberOfCylinders = new ValidatableObject<uint?>();
 
         AddValidators();
     }
@@ -28,11 +28,11 @@ public partial class MotorcycleModel
     public MotorcycleModel(MotorcycleEntity entity): this()
     {
         this.Id = entity.PublicId;
-        this.ManufacturerId.Value = entity.Manufacturer.Id;
+        this.Manufacturer.Value = new ManufacturerModel(entity.Manufacturer);
         this.Model.Value = entity.Model;
         this.Cubic.Value = entity.Cubic;
         this.ReleaseYear.Value = entity.ReleaseYear;
-        this.Cylinders.Value = entity.Cylinders;
+        this.NumberOfCylinders.Value = entity.Cylinders;
     }
 
     public MotorcycleEntity ToEntity()
@@ -40,27 +40,27 @@ public partial class MotorcycleModel
         return new MotorcycleEntity
         {
             PublicId = Id,
-            ManufacturerId = ManufacturerId.Value,
+            ManufacturerId = Manufacturer.Value.Id,
             Model = Model.Value,
             Cubic = Cubic.Value ?? 0,
             ReleaseYear = ReleaseYear.Value ?? 0,
-            Cylinders = Cylinders.Value ?? 0
+            Cylinders = NumberOfCylinders.Value ?? 0
         };
     }
 
     public void ToEntity(MotorcycleEntity entity)
     {
         entity.PublicId = Id;
-        entity.ManufacturerId = ManufacturerId.Value;
+        entity.ManufacturerId = Manufacturer.Value.Id;
         entity.Model = Model.Value;
         entity.Cubic = Cubic.Value ?? 0;
         entity.ReleaseYear = ReleaseYear.Value ?? 0;
-        entity.Cylinders = Cylinders.Value ?? 0;
+        entity.Cylinders = NumberOfCylinders.Value ?? 0;
     }
 
     private void AddValidators()
     {
-        this.ManufacturerId.Validations.Add(new MinValueRule<uint>(1)
+        this.Manufacturer.Validations.Add(new PickerValidationRule<ManufacturerModel>
         {
             ValidationMessage = "ManufacturerId must be selected"
         });
@@ -90,13 +90,13 @@ public partial class MotorcycleModel
             },
             new MaxValueRule<uint?>(DateTime.Now.Year)
             {
-                ValidationMessage = "Cubic field cant be greater then the currnet year"
+                ValidationMessage = "Release Year can't be greater then the currnet year"
             }
         ]);
 
-        this.Cylinders.Validations.AddRange(new IsNotNullOrEmptyRule<uint?>
+        this.NumberOfCylinders.Validations.AddRange(new IsNotNullOrEmptyRule<uint?>
         {
-            ValidationMessage = "Cylinder field is required"
+            ValidationMessage = "Number of cylinders must be selected"
         });
     }
 }

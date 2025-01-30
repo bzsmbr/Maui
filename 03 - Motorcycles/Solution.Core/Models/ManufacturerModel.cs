@@ -1,6 +1,6 @@
 ﻿namespace Solution.Core.Models;
 
-public class ManufacturerModel
+public class ManufacturerModel : IObjectValidator<uint>
 {
     public uint Id { get; set; }
 
@@ -18,6 +18,11 @@ public class ManufacturerModel
 
     public ManufacturerModel(ManufacturerEntity entity)
     {
+        if (entity is null)
+        {
+            return;
+        }
+
         Id = entity.Id;
         Name = entity.Name;
     }
