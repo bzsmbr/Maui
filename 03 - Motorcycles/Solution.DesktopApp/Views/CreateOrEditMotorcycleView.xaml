@@ -23,7 +23,7 @@
 
     <StackLayout Orientation="Vertical">
 
-        <Label Text="Add new motorcycle" Style="{StaticResource PageTitle}" />
+        <Label Text="{Binding Title}" Style="{StaticResource PageTitle}" />
 
         <VerticalStackLayout Style="{StaticResource FormLineContainer}">
             <Label Text="Manufacturer"></Label>
@@ -89,7 +89,7 @@
         </VerticalStackLayout>
 
         <VerticalStackLayout Style="{StaticResource FormLineContainer}">
-            <Button Text="Save" Command="{Binding SaveCommand}" WidthRequest="250"/>
+            <Button Text="Submit" Command="{Binding SubmitCommand}" WidthRequest="250"/>
         </VerticalStackLayout>
         
   </StackLayout>
