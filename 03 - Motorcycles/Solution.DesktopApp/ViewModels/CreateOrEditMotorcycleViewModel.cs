@@ -1,4 +1,6 @@
-﻿namespace Solution.DesktopApp.ViewModels;
+﻿using ErrorOr;
+
+namespace Solution.DesktopApp.ViewModels;
 
 [ObservableObject]
 public partial class CreateOrEditMotorcycleViewModel(
@@ -9,26 +11,6 @@ public partial class CreateOrEditMotorcycleViewModel(
     #region life cycle commands
     public IAsyncRelayCommand AppearingCommand => new AsyncRelayCommand(OnAppearingkAsync);
     public IAsyncRelayCommand DisappearingCommand => new AsyncRelayCommand(OnDisappearingAsync);
-
-    #endregion
-
-    #region paging commands
-    public IAsyncRelayCommand PrevousPageCommand => new AsyncRelayCommand(OnPreviousPageCommand);
-    public IAsyncRelayCommand NextPageCommand => new AsyncRelayCommand(OnNextPageCommand);
-
-    [ObservableProperty]
-    private bool isPreviousButtonEnabled;
-    [ObservableProperty]
-    private bool isNextButtonEnabled;
-
-
-    private int page = 1;
-    private bool isLoading = false;
-    private bool hasNextPage = true;
-
-    [ObservableProperty]
-    private ObservableCollection<MotorcycleModel> motorcycles;
-
     #endregion
 
     #region validation commands
@@ -39,12 +21,11 @@ public partial class CreateOrEditMotorcycleViewModel(
     public IRelayCommand ReleaseYearValidationCommand => new RelayCommand(() => this.ReleaseYear.Validate());
     #endregion
 
-    private delegate Task ButtonActionDelagate();
-    private ButtonActionDelagate asyncButtonAction;
+    private delegate Task ButtonActionDelegate(); // fuggveny ertekeket tudunk neki adni ami taskokat ad vissza es nincs parametere
+    private ButtonActionDelegate asyncButtonAction;
 
-    [ObservableProperty]
+    [ObservableProperty] 
     private string title;
-
     public IAsyncRelayCommand SubmitCommand => new AsyncRelayCommand(OnSubmitAsync);
 
     [ObservableProperty]
@@ -55,14 +36,13 @@ public partial class CreateOrEditMotorcycleViewModel(
 
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        await Task.Run(() => LoadManufacturersAsync());
+        await Task.Run(() => LoadManufacturers());
 
         bool hasValue = query.TryGetValue("Motorcycle", out object result);
 
-        if (!hasValue)
+        if(!hasValue)
         {
             asyncButtonAction = OnSaveAsync;
-            Title = "Add new Motorcycle";
             return;
         }
 
@@ -76,20 +56,17 @@ public partial class CreateOrEditMotorcycleViewModel(
         this.NumberOfCylinders.Value = motorcycle.NumberOfCylinders.Value;
 
         asyncButtonAction = OnUpdateAsync;
-        Title = "Update Motorcycle";
+        Title = "Update motorcycle";
+        return;
     }
 
     private async Task OnAppearingkAsync()
     {
-        IsPreviousButtonEnabled = page > 1 && !isLoading;
-        IsNextButtonEnabled = !isLoading && hasNextPage;
-
-        await LoadMotorcycles();
     }
 
     private async Task OnDisappearingAsync()
-    { }
-
+    { 
+    }
     private async Task OnSubmitAsync() => await asyncButtonAction();
 
     private async Task OnSaveAsync()
@@ -104,7 +81,7 @@ public partial class CreateOrEditMotorcycleViewModel(
         var message = result.IsError ? result.FirstError.Description : "Motorcycle saved.";
         var title = result.IsError ? "Error" : "Information";
 
-        if (!result.IsError)
+        if(!result.IsError)
         {
             ClearForm();
         }
@@ -112,7 +89,7 @@ public partial class CreateOrEditMotorcycleViewModel(
         await Application.Current.MainPage.DisplayAlert(title, message, "OK");
     }
 
-    private async Task OnUpdateAsync()
+    private async Task OnUpdateAsync() 
     {
         if (!IsFormValid())
         {
@@ -122,17 +99,18 @@ public partial class CreateOrEditMotorcycleViewModel(
         var result = await motorcycleService.UpdateAsync(this);
 
         var message = result.IsError ? result.FirstError.Description : "Motorcycle updated.";
+
         var title = result.IsError ? "Error" : "Information";
 
         await Application.Current.MainPage.DisplayAlert(title, message, "OK");
     }
 
-    private async Task LoadManufacturersAsync()
+    private async Task LoadManufacturers()
     {
         Manufacturers = await dbContext.Manufacturers.AsNoTracking()
-                                                     .OrderBy(x => x.Name)
-                                                     .Select(x => new ManufacturerModel(x))
-                                                     .ToListAsync();
+                                                        .OrderBy(x => x.Name)
+                                                        .Select(x => new ManufacturerModel(x))
+                                                        .ToListAsync();
     }
 
     private void ClearForm()
@@ -153,48 +131,10 @@ public partial class CreateOrEditMotorcycleViewModel(
         this.NumberOfCylinders.Validate();
 
 
-        return this.Manufacturer?.IsValid ?? false &&
+        return (this.Manufacturer?.IsValid ?? false) &&
                this.Model.IsValid &&
                this.Cubic.IsValid &&
                this.ReleaseYear.IsValid &&
-               this.NumberOfCylinders.IsValid;
+               (this.NumberOfCylinders.IsValid);
     }
-
-    private async Task OnPreviousPageCommand()
-    {
-        page = page < 1 ? 1 : --page;
-        isLoading = true;
-        await LoadMotorcycles();
-        isLoading = false;
-
-        IsPreviousButtonEnabled = page > 1 && !isLoading;
-        IsNextButtonEnabled = !isLoading && hasNextPage;
-    }
-
-    private async Task OnNextPageCommand()
-    {
-        page++;
-        isLoading = true;
-        await LoadMotorcycles();
-        isLoading = false;
-
-        IsPreviousButtonEnabled = page > 1 && !isLoading;
-        IsNextButtonEnabled = !isLoading && hasNextPage;
-    }
-
-    private async Task LoadMotorcycles()
-    {
-        var result = await motorcycleService.GetPagedAsync(page);
-
-        if (result.IsError)
-        {
-            await Application.Current.MainPage.DisplayAlert("Error", "Motorcycles not loaded!", "OK!");
-            return;
-        }
-
-        hasNextPage = !(result.Value.Count < 5);
-
-        Motorcycles = new ObservableCollection<MotorcycleModel>(result.Value);
-    }
-
 }

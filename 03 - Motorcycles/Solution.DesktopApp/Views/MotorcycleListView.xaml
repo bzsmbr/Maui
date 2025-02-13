@@ -16,7 +16,6 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100" />
-            <RowDefinition Height="100" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -70,12 +69,11 @@
                 </CollectionView.ItemTemplate>
                 <CollectionView.Footer>
                     <FlexLayout JustifyContent="SpaceBetween" Direction="Row"
-                                Margin="0,20">
-                        <Button Text="Previous page" Command="{Binding OnPreviousPageCommand}" IsEnabled="{Binding IsPreviousButtonEnabled}"/>
-                        <Button Text="Next page" Command="{Binding OnNextPageCommand}" IsEnabled="{Binding IsNextButtonEnabled}"/>
+                                Margin="0, 20">
+                        <Button Text="Previous page" Command="{Binding PreviousPageCommand}"/>
+                        <Button Text="Next page" Command="{Binding NextPageCommand}"/>
                     </FlexLayout>
                 </CollectionView.Footer>
-                    
             </CollectionView>
         </ScrollView>
         

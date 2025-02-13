@@ -2,7 +2,7 @@
 
 public class MotorcycleService(AppDbContext dbContext) : IMotorcycleService
 {
-    private const int ROW_COUNT = 5;
+    private const int ROW_COUNT = 10;
 
     public async Task<ErrorOr<MotorcycleModel>> CreateAsync(MotorcycleModel model)
     {
@@ -70,15 +70,23 @@ public class MotorcycleService(AppDbContext dbContext) : IMotorcycleService
                                    .Select(x => new MotorcycleModel(x))
                                    .ToListAsync();
 
-    public async Task<ErrorOr<List<MotorcycleModel>>> GetPagedAsync(int page = 0)
+    public async Task<ErrorOr<PaginationModel<MotorcycleModel>>> GetPagedAsync(int page = 0)
     {
         page = page < 0 ? 0 : page - 1;
 
-        return await dbContext.Motorcycles.AsNoTracking()
-                                          .Include(x => x.Manufacturer)
-                                          .Skip(page * ROW_COUNT)
-                                          .Take(ROW_COUNT)
-                                          .Select(x => new MotorcycleModel(x))
-                                          .ToListAsync();
+        var motorcycles =  await dbContext.Motorcycles.AsNoTracking()
+                                                      .Include(x => x.Manufacturer)
+                                                      .Skip(page * ROW_COUNT)
+                                                      .Take(ROW_COUNT)
+                                                      .Select(x => new MotorcycleModel(x))
+                                                      .ToListAsync();
+
+        var paginationModel = new PaginationModel<MotorcycleModel>
+        {
+            Items = motorcycles,
+            Count = await dbContext.Motorcycles.CountAsync()
+        };
+
+        return paginationModel;
     }
 }

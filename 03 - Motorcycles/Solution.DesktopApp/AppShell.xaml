@@ -23,7 +23,7 @@
           <MenuFlyoutItem Text="Exit" Command="{Binding ExitCommand}" />
         </MenuBarItem>
 
-        <MenuBarItem Text="Motocycle">
+        <MenuBarItem Text="Motorcycle">
           <MenuFlyoutItem Text="Add New" Command="{Binding AddNewMotorcycleCommand}">
             <MenuFlyoutItem.IconImageSource>
               <FontImageSource Glyph="&#x25B6;" FontFamily="Arial" Color="Black"/>
