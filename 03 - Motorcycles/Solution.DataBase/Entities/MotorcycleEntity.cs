@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.Design;
-
-namespace Solution.Database.Entities;
+﻿namespace Solution.Database.Entities;
 
 [Table("Motorcycle")]
 public class MotorcycleEntity
@@ -30,4 +28,8 @@ public class MotorcycleEntity
     public uint ManufacturerId { get; set; }
 
     public virtual ManufacturerEntity Manufacturer { get; set; }
+
+    [ForeignKey("Type")]
+    public uint TypeId { get; set; }
+    public virtual TypeEntity Type { get; set; }
 }

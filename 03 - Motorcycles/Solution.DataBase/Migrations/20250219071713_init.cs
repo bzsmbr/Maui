@@ -24,6 +24,19 @@ namespace Solution.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Type",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Type", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Motorcycle",
                 columns: table => new
                 {
@@ -34,7 +47,8 @@ namespace Solution.Database.Migrations
                     Cubic = table.Column<long>(type: "bigint", nullable: false),
                     ReleaseYear = table.Column<long>(type: "bigint", nullable: false),
                     Cylinders = table.Column<long>(type: "bigint", nullable: false),
-                    ManufacturerId = table.Column<long>(type: "bigint", nullable: false)
+                    ManufacturerId = table.Column<long>(type: "bigint", nullable: false),
+                    TypeId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,6 +57,12 @@ namespace Solution.Database.Migrations
                         name: "FK_Motorcycle_Manufacturer_ManufacturerId",
                         column: x => x.ManufacturerId,
                         principalTable: "Manufacturer",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Motorcycle_Type_TypeId",
+                        column: x => x.TypeId,
+                        principalTable: "Type",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -57,6 +77,17 @@ namespace Solution.Database.Migrations
                 name: "IX_Motorcycle_ManufacturerId",
                 table: "Motorcycle",
                 column: "ManufacturerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Motorcycle_TypeId",
+                table: "Motorcycle",
+                column: "TypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Type_Name",
+                table: "Type",
+                column: "Name",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -67,6 +98,9 @@ namespace Solution.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "Manufacturer");
+
+            migrationBuilder.DropTable(
+                name: "Type");
         }
     }
 }
