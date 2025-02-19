@@ -13,10 +13,10 @@ public class MotorcycleEntity
 
     [StringLength(128)]
     [Required]
-    public string Model {  get; set; }
+    public string Model { get; set; }
 
     [Required]
-    public uint Cubic {  get; set; }
+    public uint Cubic { get; set; }
 
     [Required]
     public uint ReleaseYear { get; set; }
