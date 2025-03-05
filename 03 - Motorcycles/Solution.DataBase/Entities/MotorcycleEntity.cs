@@ -15,6 +15,12 @@ public class MotorcycleEntity
     [Required]
     public string Model { get; set; }
 
+    [StringLength(128)]
+    public string? ImageId { get; set; }
+
+    [StringLength(128)]
+    public string? WebContentLink { get; set; }
+
     [Required]
     public uint Cubic { get; set; }
 
@@ -32,4 +38,8 @@ public class MotorcycleEntity
     [ForeignKey("Type")]
     public uint TypeId { get; set; }
     public virtual TypeEntity Type { get; set; }
+
+    [ForeignKey("CoolerType")]
+    public uint CoolerTypeId { get; set; }
+    public virtual CoolerTypeEntity CoolerType { get; set; }
 }

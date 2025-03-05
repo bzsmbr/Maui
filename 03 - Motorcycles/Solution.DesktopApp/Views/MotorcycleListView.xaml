@@ -35,6 +35,8 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="100" />
                             <ColumnDefinition Width="100" />
                         </Grid.ColumnDefinitions>
 
@@ -51,17 +53,30 @@
                                HorizontalTextAlignment="Center"
                                Style="{x:StaticResource TableHeader}" />
                         <Label Grid.Column="3"
-                               Text="Release Year"
+                               Text="Cooler Type"
                                HorizontalTextAlignment="Center"
                                Style="{x:StaticResource TableHeader}" />
                         <Label Grid.Column="4"
-                               Text="Number Of Cylinders"
+                               Text="Release Year"
                                HorizontalTextAlignment="Center"
                                Style="{x:StaticResource TableHeader}" />
                         <Label Grid.Column="5"
+                               Text="Number Of Cylinders"
+                               HorizontalTextAlignment="Center"
+                               Style="{x:StaticResource TableHeader}" />
+                        <Label Grid.Column="6"
                                Text="Cubic"
                                HorizontalTextAlignment="Center"
                                Style="{x:StaticResource TableHeader}" />
+                        <Label Grid.Column="7"
+                               Text="Edit"
+                               HorizontalTextAlignment="Center"
+                               Style="{x:StaticResource TableHeader}" />
+                        <Label Grid.Column="8"
+                               Text="Delete"
+                               HorizontalTextAlignment="Center"
+                               Style="{x:StaticResource TableHeader}" />
+                        
                     </Grid>
                 </CollectionView.Header>
                 <CollectionView.ItemsLayout>
@@ -69,7 +84,9 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:MotorcycleModel">
-                        <components:MotorcycleListComponent Motorcycle="{Binding .}" />
+                        <components:MotorcycleListComponent Motorcycle="{Binding .}" 
+                                                            DeleteCommand="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MotorcycleListViewModel}}, Path=DeleteCommand}"
+                                                            CommandParameter="{Binding Id}"/>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
                 <CollectionView.Footer>

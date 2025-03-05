@@ -18,6 +18,12 @@ public partial class MotorcycleListViewModel(IMotorcycleService motorcycleServic
     public ICommand NextPageCommand { get; private set; }
     #endregion
 
+    #region component commands
+    public IAsyncRelayCommand DeleteCommand => new AsyncRelayCommand<string>((id) => OnDeleteAsync(id));
+
+    
+    #endregion
+
     [ObservableProperty]
     private ObservableCollection<MotorcycleModel> motorcycles;
 
@@ -77,5 +83,24 @@ public partial class MotorcycleListViewModel(IMotorcycleService motorcycleServic
 
         ((Command)PreviousPageCommand).ChangeCanExecute();
         ((Command)NextPageCommand).ChangeCanExecute();
+    }
+
+    private async Task OnDeleteAsync(string? id)
+    {
+        var result = await motorcycleService.DeleteAsync(id);
+
+        var message = result.IsError ? result.FirstError.Description : "Motorcycle deleted.";
+        var title = result.IsError ? "Error" : "Infromation";
+
+        if (!result.IsError)
+        {
+            var motorcycle = motorcycles.SingleOrDefault(x => x.Id == id);
+            motorcycles.Remove(motorcycle);
+
+            if (motorcycles.Count == 0)
+                await LoadMotorcycles();
+
+            await Application.Current.MainPage.DisplayAlert(title, message, "OK");
+        }
     }
 }

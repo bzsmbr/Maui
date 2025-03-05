@@ -4,6 +4,8 @@ public class AppDbContext() : DbContext
 {
 	public DbSet<TypeEntity> Types { get; set; }
 
+    public DbSet<CoolerTypeEntity> CoolerTypes { get; set; }
+
     public DbSet<ManufacturerEntity> Manufacturers { get; set; }
 
 	public DbSet<MotorcycleEntity> Motorcycles { get; set; }
