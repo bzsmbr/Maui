@@ -1,6 +1,4 @@
-﻿using ErrorOr;
-
-namespace Solution.DesktopApp.ViewModels;
+﻿namespace Solution.DesktopApp.ViewModels;
 
 [ObservableObject]
 public partial class CreateOrEditMotorcycleViewModel(
@@ -15,11 +13,7 @@ public partial class CreateOrEditMotorcycleViewModel(
 
     #region validation commands
     public IRelayCommand ManufacturerIndexChangedCommand => new RelayCommand(() => this.Manufacturer.Validate());
-
     public IRelayCommand TypeIndexChangedCommand => new RelayCommand(() => this.Type.Validate());
-
-    public IRelayCommand CoolerTypeIndexChangedCommand => new RelayCommand(() => this.Type.Validate());
-
     public IRelayCommand CylindersIndexChangedCommand => new RelayCommand(() => this.NumberOfCylinders.Validate());
     public IRelayCommand ModelValidationCommand => new RelayCommand(() => this.Model.Validate());
     public IRelayCommand CubicValidationCommand => new RelayCommand(() => this.Cubic.Validate());
@@ -28,14 +22,13 @@ public partial class CreateOrEditMotorcycleViewModel(
 
     #region event commands
     public IAsyncRelayCommand SubmitCommand => new AsyncRelayCommand(OnSubmitAsync);
-
     public IAsyncRelayCommand ImageSelectCommand => new AsyncRelayCommand(OnImageSelectAsync);
     #endregion
 
-    private delegate Task ButtonActionDelegate(); // fuggveny ertekeket tudunk neki adni ami taskokat ad vissza es nincs parametere
-    private ButtonActionDelegate asyncButtonAction;
+    private delegate Task ButtonActionDelagate();
+    private ButtonActionDelagate asyncButtonAction;
 
-    [ObservableProperty] 
+    [ObservableProperty]
     private string title;
 
     [ObservableProperty]
@@ -43,9 +36,6 @@ public partial class CreateOrEditMotorcycleViewModel(
 
     [ObservableProperty]
     private IList<TypeModel> types = [];
-
-    [ObservableProperty]
-    private IList<CoolerTypeModel> coolerTypes = [];
 
     [ObservableProperty]
     private IList<uint> cylinders = [1, 2, 3, 4, 6, 8];
@@ -57,17 +47,15 @@ public partial class CreateOrEditMotorcycleViewModel(
 
     public async void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        await Task.Run(() => LoadManufacturers());
-
-        await Task.Run(() => LoadTypes());
-
-        await Task.Run(() => LoadCoolerTypes());
+        await Task.Run(LoadManufacturersAsync);
+        await Task.Run(LoadTypesAsync);
 
         bool hasValue = query.TryGetValue("Motorcycle", out object result);
 
         if(!hasValue)
         {
             asyncButtonAction = OnSaveAsync;
+            Title = "Add new  motorcycle";
             return;
         }
 
@@ -76,15 +64,24 @@ public partial class CreateOrEditMotorcycleViewModel(
         this.Id = motorcycle.Id;
         this.Manufacturer.Value = motorcycle.Manufacturer.Value;
         this.Type.Value = motorcycle.Type.Value;
-        this.CoolerType.Value = motorcycle.CoolerType.Value;
         this.Model.Value = motorcycle.Model.Value;
         this.ReleaseYear.Value = motorcycle.ReleaseYear.Value;
         this.Cubic.Value = motorcycle.Cubic.Value;
         this.NumberOfCylinders.Value = motorcycle.NumberOfCylinders.Value;
+        this.ImageId = motorcycle.ImageId;
+        this.WebContentLink = motorcycle.WebContentLink;
+
+        if(!string.IsNullOrEmpty(motorcycle.WebContentLink))
+        {
+            Image = new UriImageSource
+            {
+                Uri = new Uri(motorcycle.WebContentLink),
+                CacheValidity = new TimeSpan(10, 0, 0, 0)
+            };
+        }
 
         asyncButtonAction = OnUpdateAsync;
         Title = "Update motorcycle";
-        return;
     }
 
     private async Task OnAppearingkAsync()
@@ -92,8 +89,8 @@ public partial class CreateOrEditMotorcycleViewModel(
     }
 
     private async Task OnDisappearingAsync()
-    { 
-    }
+    { }
+
     private async Task OnSubmitAsync() => await asyncButtonAction();
 
     private async Task OnSaveAsync()
@@ -103,14 +100,13 @@ public partial class CreateOrEditMotorcycleViewModel(
             return;
         }
 
-        await UploadImageAsync();
+        await UploaImageAsync();
 
         var result = await motorcycleService.CreateAsync(this);
-
         var message = result.IsError ? result.FirstError.Description : "Motorcycle saved.";
         var title = result.IsError ? "Error" : "Information";
 
-        if(!result.IsError)
+        if (!result.IsError)
         {
             ClearForm();
         }
@@ -118,19 +114,18 @@ public partial class CreateOrEditMotorcycleViewModel(
         await Application.Current.MainPage.DisplayAlert(title, message, "OK");
     }
 
-    private async Task OnUpdateAsync() 
+    private async Task OnUpdateAsync()
     {
         if (!IsFormValid())
         {
             return;
         }
 
-        await UploadImageAsync();
+        await UploaImageAsync();
 
         var result = await motorcycleService.UpdateAsync(this);
 
         var message = result.IsError ? result.FirstError.Description : "Motorcycle updated.";
-
         var title = result.IsError ? "Error" : "Information";
 
         await Application.Current.MainPage.DisplayAlert(title, message, "OK");
@@ -139,21 +134,21 @@ public partial class CreateOrEditMotorcycleViewModel(
     private async Task OnImageSelectAsync()
     {
         selectedFile = await FilePicker.PickAsync(new PickOptions
-        { 
+        {
             FileTypes = FilePickerFileType.Images,
             PickerTitle = "Please select the motorcycle image"
         });
 
-        if (selectedFile is null)
+        if(selectedFile is null)
         {
             return;
         }
 
         var stream = await selectedFile.OpenReadAsync();
-        this.Image = ImageSource.FromStream(() => stream);
+        Image = ImageSource.FromStream(() => stream);
     }
 
-    private async Task UploadImageAsync()
+    private async Task UploaImageAsync()
     {
         if (selectedFile is null)
         {
@@ -171,15 +166,15 @@ public partial class CreateOrEditMotorcycleViewModel(
         this.WebContentLink = imageUploadResult.IsError ? null : imageUploadResult.Value.WebContentLink;
     }
 
-    private async Task LoadManufacturers()
+    private async Task LoadManufacturersAsync()
     {
         Manufacturers = await dbContext.Manufacturers.AsNoTracking()
-                                                        .OrderBy(x => x.Name)
-                                                        .Select(x => new ManufacturerModel(x))
-                                                        .ToListAsync();
+                                                     .OrderBy(x => x.Name)
+                                                     .Select(x => new ManufacturerModel(x))
+                                                     .ToListAsync();
     }
 
-    private async Task LoadTypes()
+    private async Task LoadTypesAsync()
     {
         Types = await dbContext.Types.AsNoTracking()
                                      .OrderBy(x => x.Name)
@@ -187,30 +182,24 @@ public partial class CreateOrEditMotorcycleViewModel(
                                      .ToListAsync();
     }
 
-    private async Task LoadCoolerTypes()
-    {
-        CoolerTypes = await dbContext.CoolerTypes.AsNoTracking()
-                                     .OrderBy(x => x.Name)
-                                     .Select(x => new CoolerTypeModel(x))
-                                     .ToListAsync();
-    }
-
     private void ClearForm()
     {
         this.Manufacturer.Value = null;
-        this.Type.Value = null;
-        this.CoolerType.Value = null;
         this.Model.Value = null;
         this.Cubic.Value = null;
         this.ReleaseYear.Value = null;
         this.NumberOfCylinders.Value = null;
+
+        this.Image = null;
+        this.selectedFile = null;
+        this.WebContentLink = null;
+        this.ImageId = null;
     }
 
     private bool IsFormValid()
     {
         this.Manufacturer.Validate();
         this.Type.Validate();
-        this.CoolerType.Validate();
         this.Model.Validate();
         this.Cubic.Validate();
         this.ReleaseYear.Validate();
@@ -219,10 +208,9 @@ public partial class CreateOrEditMotorcycleViewModel(
 
         return (this.Manufacturer?.IsValid ?? false) &&
                (this.Type?.IsValid ?? false) &&
-               (this.CoolerType?.IsValid ?? false) &&
                this.Model.IsValid &&
                this.Cubic.IsValid &&
                this.ReleaseYear.IsValid &&
-               (this.NumberOfCylinders.IsValid);
+               (this.NumberOfCylinders?.IsValid ?? false);
     }
 }

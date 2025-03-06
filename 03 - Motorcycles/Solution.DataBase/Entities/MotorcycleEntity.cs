@@ -12,17 +12,17 @@ public class MotorcycleEntity
     public string PublicId { get; set; }
 
     [StringLength(128)]
-    [Required]
-    public string Model { get; set; }
-
-    [StringLength(128)]
     public string? ImageId { get; set; }
 
-    [StringLength(128)]
+    [StringLength(512)]
     public string? WebContentLink { get; set; }
 
+    [StringLength(128)]
     [Required]
-    public uint Cubic { get; set; }
+    public string Model {  get; set; }
+
+    [Required]
+    public uint Cubic {  get; set; }
 
     [Required]
     public uint ReleaseYear { get; set; }
@@ -32,14 +32,10 @@ public class MotorcycleEntity
 
     [ForeignKey("Manufacturer")]
     public uint ManufacturerId { get; set; }
-
     public virtual ManufacturerEntity Manufacturer { get; set; }
 
     [ForeignKey("Type")]
     public uint TypeId { get; set; }
-    public virtual TypeEntity Type { get; set; }
 
-    [ForeignKey("CoolerType")]
-    public uint CoolerTypeId { get; set; }
-    public virtual CoolerTypeEntity CoolerType { get; set; }
+    public virtual MotorcycleTypeEntity Type { get; set; }
 }

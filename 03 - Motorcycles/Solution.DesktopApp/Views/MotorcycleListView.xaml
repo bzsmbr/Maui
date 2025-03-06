@@ -23,7 +23,7 @@
                Text="MOTORCYCLES"
                Style="{x:StaticResource PageTitle}" />
        
-        <ScrollView Grid.Row="2">
+        <ScrollView Grid.Row="1">
             <CollectionView ItemsSource="{Binding Motorcycles}" Margin="50,0,50,0">
                 <CollectionView.Header>
                     <Grid BackgroundColor="{AppThemeBinding Light=Black, Dark=WhiteSmoke}"
@@ -36,47 +36,38 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="80" />
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Column="0"
-                               Text="Manufacturer"
+                               Text="Image"
                                HorizontalTextAlignment="Center"
                                Style="{x:StaticResource TableHeader}" />
                         <Label Grid.Column="1"
-                               Text="Model"
+                               Text="Manufacturer"
                                HorizontalTextAlignment="Center"
                                Style="{x:StaticResource TableHeader}" />
                         <Label Grid.Column="2"
-                               Text="Type"
+                               Text="Model"
                                HorizontalTextAlignment="Center"
                                Style="{x:StaticResource TableHeader}" />
                         <Label Grid.Column="3"
-                               Text="Cooler Type"
+                               Text="Type"
                                HorizontalTextAlignment="Center"
                                Style="{x:StaticResource TableHeader}" />
                         <Label Grid.Column="4"
                                Text="Release Year"
-                               HorizontalTextAlignment="Center"
+                               HorizontalTextAlignment="End"
                                Style="{x:StaticResource TableHeader}" />
                         <Label Grid.Column="5"
                                Text="Number Of Cylinders"
-                               HorizontalTextAlignment="Center"
+                               HorizontalTextAlignment="End"
                                Style="{x:StaticResource TableHeader}" />
                         <Label Grid.Column="6"
                                Text="Cubic"
-                               HorizontalTextAlignment="Center"
+                               HorizontalTextAlignment="End"
                                Style="{x:StaticResource TableHeader}" />
-                        <Label Grid.Column="7"
-                               Text="Edit"
-                               HorizontalTextAlignment="Center"
-                               Style="{x:StaticResource TableHeader}" />
-                        <Label Grid.Column="8"
-                               Text="Delete"
-                               HorizontalTextAlignment="Center"
-                               Style="{x:StaticResource TableHeader}" />
-                        
                     </Grid>
                 </CollectionView.Header>
                 <CollectionView.ItemsLayout>
@@ -84,16 +75,16 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:MotorcycleModel">
-                        <components:MotorcycleListComponent Motorcycle="{Binding .}" 
+                        <components:MotorcycleListComponent Motorcycle="{Binding .}"
                                                             DeleteCommand="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MotorcycleListViewModel}}, Path=DeleteCommand}"
                                                             CommandParameter="{Binding Id}"/>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
                 <CollectionView.Footer>
                     <FlexLayout JustifyContent="SpaceBetween" Direction="Row"
-                                Margin="0, 20">
-                        <Button Text="Previous page" Command="{Binding PreviousPageCommand}"/>
-                        <Button Text="Next page" Command="{Binding NextPageCommand}"/>
+                                Margin="0,20">
+                        <Button Text="Previous page" Command="{Binding PreviousPageCommand}" />
+                        <Button Text="Next page" Command="{Binding NextPageCommand}" />
                     </FlexLayout>
                 </CollectionView.Footer>
             </CollectionView>

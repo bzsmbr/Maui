@@ -1,6 +1,6 @@
 ﻿namespace Solution.Core.Models;
 
-public class TypeModel : IObjectValidator<uint>
+public class TypeModel: IObjectValidator<uint>
 {
     public uint Id { get; set; }
 
@@ -16,7 +16,7 @@ public class TypeModel : IObjectValidator<uint>
         Name = name;
     }
 
-    public TypeModel(TypeEntity entity)
+    public TypeModel(MotorcycleTypeEntity entity)
     {
         if (entity is null)
         {

@@ -1,9 +1,4 @@
-﻿using ErrorOr;
-using Microsoft.IdentityModel.Tokens;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
-
-namespace Solution.DesktopApp.ViewModels;
+﻿namespace Solution.DesktopApp.ViewModels;
 
 [ObservableObject]
 public partial class MotorcycleListViewModel(IMotorcycleService motorcycleService)
@@ -20,18 +15,10 @@ public partial class MotorcycleListViewModel(IMotorcycleService motorcycleServic
 
     #region component commands
     public IAsyncRelayCommand DeleteCommand => new AsyncRelayCommand<string>((id) => OnDeleteAsync(id));
-
-    
     #endregion
 
     [ObservableProperty]
     private ObservableCollection<MotorcycleModel> motorcycles;
-
-    [ObservableProperty]
-    private bool isPreviousPageButtonEnabled;
-
-    [ObservableProperty]
-    private bool isNextPageButtonEnabled;
 
     private int page = 1;
     private bool isLoading = false;
@@ -40,33 +27,35 @@ public partial class MotorcycleListViewModel(IMotorcycleService motorcycleServic
 
     private async Task OnAppearingAsync()
     {
-
         PreviousPageCommand = new Command(async () => await OnPreviousPageAsync(), () => page > 1 && !isLoading);
         NextPageCommand = new Command(async () => await OnNextPageAsync(), () => !isLoading && hasNextPage);
 
-        await LoadMotorcycles();
+        await LoadMotorcyclesAsync();
     }
 
     private async Task OnDisappearingAsync()
     { }
 
-    private async Task OnPreviousPageAsync() 
+    private async Task OnPreviousPageAsync()
     {
         if (isLoading) return;
 
         page = page <= 1 ? 1 : --page;
-        await LoadMotorcycles();
+        await LoadMotorcyclesAsync();
     }
 
-    private async Task OnNextPageAsync() 
+    private async Task OnNextPageAsync()
     {
         if (isLoading) return;
 
         page++;
-        await LoadMotorcycles();
+        await LoadMotorcyclesAsync();
     }
-    private async Task LoadMotorcycles()
+
+    private async Task LoadMotorcyclesAsync()
     {
+        isLoading = true;
+
         var result = await motorcycleService.GetPagedAsync(page);
 
         if (result.IsError)
@@ -86,21 +75,23 @@ public partial class MotorcycleListViewModel(IMotorcycleService motorcycleServic
     }
 
     private async Task OnDeleteAsync(string? id)
-    {
+    { 
         var result = await motorcycleService.DeleteAsync(id);
 
         var message = result.IsError ? result.FirstError.Description : "Motorcycle deleted.";
-        var title = result.IsError ? "Error" : "Infromation";
+        var title = result.IsError ? "Error" : "Information";
 
         if (!result.IsError)
         {
             var motorcycle = motorcycles.SingleOrDefault(x => x.Id == id);
             motorcycles.Remove(motorcycle);
 
-            if (motorcycles.Count == 0)
-                await LoadMotorcycles();
-
-            await Application.Current.MainPage.DisplayAlert(title, message, "OK");
+            if(motorcycles.Count == 0)
+            {
+                await LoadMotorcyclesAsync();
+            }
         }
+
+        await Application.Current.MainPage.DisplayAlert(title, message, "OK");
     }
 }

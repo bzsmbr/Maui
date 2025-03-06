@@ -13,7 +13,7 @@ public static class ConfigureDI
         builder.Services.AddTransient<CreateOrEditMotorcycleView>();
 
         builder.Services.AddScoped<IGoogleDriveService, GoogleDriveService> ();
-        builder.Services.AddScoped<IMotorcycleService, MotorcycleService>();
+        builder.Services.AddTransient<IMotorcycleService, MotorcycleService>();
 
         return builder;
 	}

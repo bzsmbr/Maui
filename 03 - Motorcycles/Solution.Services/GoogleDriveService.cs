@@ -16,7 +16,7 @@ public class GoogleDriveService(GoogleDriveSettings googleDriveSettings) : IGoog
         var fileMetaData = new Google.Apis.Drive.v3.Data.File()
         {
             Name = file.FileName,
-            Parents = new List<string> { googleDriveSettings.StudentFolderId }
+            Parents = new List<string> { googleDriveSettings.RootFolderId }
         };
 
         var mimeType = GetMimeType(file.ContentType);
@@ -57,6 +57,21 @@ public class GoogleDriveService(GoogleDriveSettings googleDriveSettings) : IGoog
         await response.DownloadAsync(stream);
 
         return stream.ToArray();
+    }
+
+    public async Task<ErrorOr<bool>> DeleteFileAsync(string fileId)
+    {
+        var service = CreateGoogleDriveService();
+
+        if (service is null)
+        {
+            return Error.NotFound(description: "Google Drive Service is down");
+        }
+
+        var request = service.Files.Delete(fileId);
+        var response = await request.ExecuteAsync();
+
+        return !string.IsNullOrEmpty(response);
     }
 
     private DriveService CreateGoogleDriveService()

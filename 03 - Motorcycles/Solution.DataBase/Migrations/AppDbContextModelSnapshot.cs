@@ -21,27 +21,6 @@ namespace Solution.Database.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Solution.Database.Entities.CoolerTypeEntity", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("CoolerType");
-                });
-
             modelBuilder.Entity("Solution.Database.Entities.ManufacturerEntity", b =>
                 {
                     b.Property<long>("Id")
@@ -70,9 +49,6 @@ namespace Solution.Database.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("CoolerTypeId")
-                        .HasColumnType("bigint");
 
                     b.Property<long>("Cubic")
                         .HasColumnType("bigint");
@@ -104,12 +80,10 @@ namespace Solution.Database.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("WebContentLink")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CoolerTypeId");
 
                     b.HasIndex("ManufacturerId");
 
@@ -118,7 +92,7 @@ namespace Solution.Database.Migrations
                     b.ToTable("Motorcycle");
                 });
 
-            modelBuilder.Entity("Solution.Database.Entities.TypeEntity", b =>
+            modelBuilder.Entity("Solution.Database.Entities.MotorcycleTypeEntity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -141,34 +115,21 @@ namespace Solution.Database.Migrations
 
             modelBuilder.Entity("Solution.Database.Entities.MotorcycleEntity", b =>
                 {
-                    b.HasOne("Solution.Database.Entities.CoolerTypeEntity", "CoolerType")
-                        .WithMany("Motorcycles")
-                        .HasForeignKey("CoolerTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Solution.Database.Entities.ManufacturerEntity", "Manufacturer")
                         .WithMany("Motorcycles")
                         .HasForeignKey("ManufacturerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Solution.Database.Entities.TypeEntity", "Type")
+                    b.HasOne("Solution.Database.Entities.MotorcycleTypeEntity", "Type")
                         .WithMany("Motorcycles")
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CoolerType");
-
                     b.Navigation("Manufacturer");
 
                     b.Navigation("Type");
-                });
-
-            modelBuilder.Entity("Solution.Database.Entities.CoolerTypeEntity", b =>
-                {
-                    b.Navigation("Motorcycles");
                 });
 
             modelBuilder.Entity("Solution.Database.Entities.ManufacturerEntity", b =>
@@ -176,7 +137,7 @@ namespace Solution.Database.Migrations
                     b.Navigation("Motorcycles");
                 });
 
-            modelBuilder.Entity("Solution.Database.Entities.TypeEntity", b =>
+            modelBuilder.Entity("Solution.Database.Entities.MotorcycleTypeEntity", b =>
                 {
                     b.Navigation("Motorcycles");
                 });

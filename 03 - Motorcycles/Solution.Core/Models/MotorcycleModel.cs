@@ -12,8 +12,6 @@ public partial class MotorcycleModel
 
     public ValidatableObject<TypeModel> Type { get; set; }
 
-    public ValidatableObject<CoolerTypeModel> CoolerType { get; set; }
-
     public ValidatableObject<string> Model { get; protected set; }
 
     public ValidatableObject<uint?> Cubic { get; protected set; }
@@ -26,7 +24,6 @@ public partial class MotorcycleModel
     {
         this.Manufacturer = new ValidatableObject<ManufacturerModel>();
         this.Type = new ValidatableObject<TypeModel>();
-        this.CoolerType = new ValidatableObject<CoolerTypeModel> { };
         this.Model = new ValidatableObject<string>();
         this.Cubic = new ValidatableObject<uint?>();
         this.ReleaseYear = new ValidatableObject<uint?>();
@@ -42,7 +39,6 @@ public partial class MotorcycleModel
         this.WebContentLink = entity.WebContentLink;
         this.Manufacturer.Value = new ManufacturerModel(entity.Manufacturer);
         this.Type.Value = new TypeModel(entity.Type);
-        this.CoolerType.Value = new CoolerTypeModel(entity.CoolerType);
         this.Model.Value = entity.Model;
         this.Cubic.Value = entity.Cubic;
         this.ReleaseYear.Value = entity.ReleaseYear;
@@ -54,11 +50,10 @@ public partial class MotorcycleModel
         return new MotorcycleEntity
         {
             PublicId = Id,
-            ImageId = ImageId,
-            WebContentLink = WebContentLink,
             ManufacturerId = Manufacturer.Value.Id,
             TypeId = Type.Value.Id,
-            CoolerTypeId = CoolerType.Value.Id,
+            ImageId = ImageId,
+            WebContentLink = WebContentLink,
             Model = Model.Value,
             Cubic = Cubic.Value ?? 0,
             ReleaseYear = ReleaseYear.Value ?? 0,
@@ -69,11 +64,10 @@ public partial class MotorcycleModel
     public void ToEntity(MotorcycleEntity entity)
     {
         entity.PublicId = Id;
-        entity.ImageId = ImageId;
-        entity.WebContentLink = WebContentLink;
         entity.ManufacturerId = Manufacturer.Value.Id;
         entity.TypeId = Type.Value.Id;
-        entity.CoolerTypeId = CoolerType.Value.Id;
+        entity.ImageId = ImageId;
+        entity.WebContentLink = WebContentLink;
         entity.Model = Model.Value;
         entity.Cubic = Cubic.Value ?? 0;
         entity.ReleaseYear = ReleaseYear.Value ?? 0;
@@ -89,12 +83,7 @@ public partial class MotorcycleModel
 
         this.Type.Validations.Add(new PickerValidationRule<TypeModel>
         {
-            ValidationMessage = "TypeId must be selected"
-        });
-
-        this.CoolerType.Validations.Add(new PickerValidationRule<CoolerTypeModel>
-        {
-            ValidationMessage = "CoolerTypeId must be selected"
+            ValidationMessage = "Type must be selected"
         });
 
         this.Model.Validations.Add(new IsNotNullOrEmptyRule<string>

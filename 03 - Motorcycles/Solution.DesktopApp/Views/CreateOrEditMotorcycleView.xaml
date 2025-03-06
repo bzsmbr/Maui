@@ -21,12 +21,11 @@
     </ContentPage.Resources>
 
     <Grid>
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-        
+
         <StackLayout Orientation="Vertical"
                      Grid.Column="0"
                      Style="{StaticResource FormLineContainer}"
@@ -43,52 +42,35 @@
                     Command="{Binding ImageSelectCommand}" />
         </StackLayout>
 
-
-        <StackLayout Orientation="Vertical"
-                     Grid.Column="1">
-
+        <StackLayout Orientation="Vertical" Grid.Column="1">
             <Label Text="{Binding Title}" Style="{StaticResource PageTitle}" />
 
             <VerticalStackLayout Style="{StaticResource FormLineContainer}">
                 <Label Text="Manufacturer"></Label>
                 <Picker ItemsSource="{Binding Manufacturers}"
-                    ItemDisplayBinding="{Binding Name}"
-                    SelectedItem="{Binding Manufacturer.Value}">
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding Manufacturer.Value}">
                     <Picker.Behaviors>
                         <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged"
-                                                    Command="{Binding ManufacturerIndexChangedCommand}" />
+                                                        Command="{Binding ManufacturerIndexChangedCommand}" />
                     </Picker.Behaviors>
                 </Picker>
                 <Label Text="{Binding Manufacturer.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
-                   Style="{StaticResource ValidationErrorLabelStyle}" />
+                       Style="{StaticResource ValidationErrorLabelStyle}" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Style="{StaticResource FormLineContainer}">
                 <Label Text="Type"></Label>
                 <Picker ItemsSource="{Binding Types}"
-            ItemDisplayBinding="{Binding Name}"
-            SelectedItem="{Binding Type.Value}">
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding Type.Value}">
                     <Picker.Behaviors>
                         <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged"
-                                            Command="{Binding TypeIndexChangedCommand}" />
+                                                        Command="{Binding TypeIndexChangedCommand}" />
                     </Picker.Behaviors>
                 </Picker>
                 <Label Text="{Binding Type.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
-           Style="{StaticResource ValidationErrorLabelStyle}" />
-            </VerticalStackLayout>
-
-            <VerticalStackLayout Style="{StaticResource FormLineContainer}">
-                <Label Text="Cooler Type"></Label>
-                <Picker ItemsSource="{Binding CoolerTypes}"
-                    ItemDisplayBinding="{Binding Name}"
-                    SelectedItem="{Binding CoolerType.Value}">
-                    <Picker.Behaviors>
-                        <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged"
-                                    Command="{Binding CoolerTypeIndexChangedCommand}" />
-                    </Picker.Behaviors>
-                </Picker>
-                <Label Text="{Binding CoolerType.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
-                   Style="{StaticResource ValidationErrorLabelStyle}" />
+                       Style="{StaticResource ValidationErrorLabelStyle}" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Style="{StaticResource FormLineContainer}">
@@ -99,7 +81,7 @@
                     </Entry.Behaviors>
                 </Entry>
                 <Label Text="{Binding Model.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
-                   Style="{StaticResource ValidationErrorLabelStyle}" />
+                       Style="{StaticResource ValidationErrorLabelStyle}" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Style="{StaticResource FormLineContainer}">
@@ -111,7 +93,7 @@
                     </Entry.Behaviors>
                 </Entry>
                 <Label Text="{Binding Cubic.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
-                   Style="{StaticResource ValidationErrorLabelStyle}" />
+                       Style="{StaticResource ValidationErrorLabelStyle}" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Style="{StaticResource FormLineContainer}">
@@ -123,29 +105,27 @@
                     </Entry.Behaviors>
                 </Entry>
                 <Label Text="{Binding ReleaseYear.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
-                   Style="{StaticResource ValidationErrorLabelStyle}" />
+                       Style="{StaticResource ValidationErrorLabelStyle}" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Style="{StaticResource FormLineContainer}">
                 <Label Text="Cylinders"></Label>
                 <Picker ItemsSource="{Binding Cylinders}"
-                    ItemDisplayBinding="{Binding .}"
-                    SelectedItem="{Binding NumberOfCylinders.Value}">
+                        ItemDisplayBinding="{Binding .}"
+                        SelectedItem="{Binding NumberOfCylinders.Value}">
                     <Picker.Behaviors>
                         <toolkit:EventToCommandBehavior EventName="SelectedIndexChanged"
-                                                    Command="{Binding CylindersIndexChangedCommand}" />
+                                                        Command="{Binding CylindersIndexChangedCommand}" />
                     </Picker.Behaviors>
                 </Picker>
                 <Label Text="{Binding NumberOfCylinders.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
-                   Style="{StaticResource ValidationErrorLabelStyle}" />
+                       Style="{StaticResource ValidationErrorLabelStyle}" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Style="{StaticResource FormLineContainer}">
                 <Button Text="Submit" Command="{Binding SubmitCommand}" WidthRequest="250"/>
             </VerticalStackLayout>
-
         </StackLayout>
-
     </Grid>
 
 </ContentPage>
